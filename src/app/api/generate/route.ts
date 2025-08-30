@@ -1,0 +1,30 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { generateCompliantImage } from '@/lib/gemini';
+
+export async function POST(request: NextRequest) {
+  try {
+    const { image, suggestions } = await request.json();
+    
+    if (!image || !suggestions || !Array.isArray(suggestions)) {
+      return NextResponse.json(
+        { error: '请提供图片数据和修改建议' },
+        { status: 400 }
+      );
+    }
+
+    // 移除data:image/jpeg;base64,前缀
+    const base64Data = image.replace(/^data:image\/[a-z]+;base64,/, '');
+    
+    const resultImageBase64 = await generateCompliantImage(base64Data, suggestions);
+    
+    return NextResponse.json({ 
+      image: `data:image/png;base64,${resultImageBase64}` 
+    });
+  } catch (error) {
+    console.error('生成API错误:', error);
+    return NextResponse.json(
+      { error: '生成失败，请重试' },
+      { status: 500 }
+    );
+  }
+}
