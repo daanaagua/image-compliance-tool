@@ -25,9 +25,9 @@ export function ResultDisplay({
   return (
     <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
-        <CardTitle className="text-center">合规图片生成完成</CardTitle>
+        <CardTitle className="text-center">Compliant Image Generated</CardTitle>
         <p className="text-center text-sm text-muted-foreground mt-2">
-          图片类型: {generatedImage?.startsWith('data:image/svg+xml') ? 'SVG' : generatedImage?.startsWith('data:image/png') ? 'PNG' : '未知'}
+          Image type: {generatedImage?.startsWith('data:image/svg+xml') ? 'SVG' : generatedImage?.startsWith('data:image/png') ? 'PNG' : 'Unknown'}
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -35,7 +35,7 @@ export function ResultDisplay({
           {generatedImage ? (
             <img
               src={generatedImage}
-              alt="生成的合规图片"
+              alt="Generated compliant image"
               className="w-full h-auto rounded-lg object-contain max-w-2xl mx-auto border"
               style={{ maxHeight: '600px' }}
               onLoad={() => console.log('Image loaded successfully')}
@@ -43,7 +43,7 @@ export function ResultDisplay({
             />
           ) : (
             <div className="text-center p-8 text-muted-foreground">
-              图片数据为空
+              Image data is empty
             </div>
           )}
         </div>
@@ -51,7 +51,7 @@ export function ResultDisplay({
         <div className="flex gap-4 justify-center">
           <Button onClick={onDownload} className="flex items-center gap-2">
             <Download className="h-4 w-4" />
-            下载图片
+            Download Image
           </Button>
           <Button 
             variant="outline" 
@@ -59,7 +59,7 @@ export function ResultDisplay({
             className="flex items-center gap-2"
           >
             <RotateCcw className="h-4 w-4" />
-            重新开始
+            Start Over
           </Button>
           {onBackToHome && (
             <Button 
@@ -67,7 +67,7 @@ export function ResultDisplay({
               onClick={onBackToHome}
               className="flex items-center gap-2"
             >
-              返回主页
+              Back to Home
             </Button>
           )}
         </div>

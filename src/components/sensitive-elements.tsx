@@ -59,11 +59,11 @@ export function SensitiveElements({
 
   const getTypeLabel = (type: string) => {
     switch (type) {
-      case 'trademark': return '商标';
-      case 'copyright': return '版权';
-      case 'product': return '产品';
-      case 'character': return '角色';
-      case 'artwork': return '艺术作品';
+      case 'trademark': return 'Trademark';
+      case 'copyright': return 'Copyright';
+      case 'product': return 'Product';
+      case 'character': return 'Character';
+      case 'artwork': return 'Artwork';
       default: return type;
     }
   };
@@ -168,9 +168,9 @@ export function SensitiveElements({
       <Card className="w-full max-w-4xl mx-auto">
         <CardContent className="p-6 text-center space-y-4">
           <Check className="mx-auto h-12 w-12 text-green-500 mb-4" />
-          <h3 className="text-lg font-semibold mb-2">图片检测完成</h3>
+          <h3 className="text-lg font-semibold mb-2">Image Detection Complete</h3>
           <p className="text-muted-foreground mb-4">
-            未检测到敏感元素，图片可以安全使用。
+            No sensitive elements detected. Your image is safe to use.
           </p>
           {onBackToHome && (
             <Button
@@ -178,7 +178,7 @@ export function SensitiveElements({
               variant="outline"
               className="mt-4"
             >
-              返回主页
+              Back to Home
             </Button>
           )}
         </CardContent>
@@ -193,9 +193,9 @@ export function SensitiveElements({
           <CardTitle className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-yellow-500" />
-              检测到敏感元素
+              Sensitive Elements Detected
               <Badge variant="destructive">
-                高风险
+                High Risk
               </Badge>
             </div>
             <div className="flex gap-2">
@@ -204,7 +204,7 @@ export function SensitiveElements({
                 size="sm"
                 onClick={selectedElements.size === detectionResult.elements.length ? handleDeselectAll : handleSelectAll}
               >
-                {selectedElements.size === detectionResult.elements.length ? '取消全选' : '一键全选'}
+                {selectedElements.size === detectionResult.elements.length ? 'Deselect All' : 'Select All'}
               </Button>
               {onBackToHome && (
                 <Button
@@ -212,7 +212,7 @@ export function SensitiveElements({
                   size="sm"
                   onClick={onBackToHome}
                 >
-                  返回主页
+                  Back to Home
                 </Button>
               )}
             </div>
@@ -241,7 +241,7 @@ export function SensitiveElements({
                       {getTypeLabel(type)}
                     </Label>
                     <Badge variant={getRiskColor(elements[0].severity)}>
-                      {elements.length} 项
+                      {elements.length} items
                     </Badge>
                   </div>
                 </div>
@@ -262,14 +262,14 @@ export function SensitiveElements({
                               {element.description}
                             </Label>
                             <p className="text-sm text-muted-foreground">
-                              严重程度: {element.severity === 'high' ? '高' : element.severity === 'medium' ? '中' : '低'}
+                              Severity: {element.severity === 'high' ? 'High' : element.severity === 'medium' ? 'Medium' : 'Low'}
                             </p>
                           </div>
                         </div>
                       </div>
                       
                       <div className="ml-6 space-y-2">
-                        <Label className="text-sm font-medium">修改建议:</Label>
+                        <Label className="text-sm font-medium">Modification Suggestions:</Label>
                         {editingSuggestion === element.index.toString() ? (
                           <div className="flex gap-2">
                             <Input
@@ -290,7 +290,7 @@ export function SensitiveElements({
                                 }
                               }}
                             >
-                              保存
+                              Save
                             </Button>
                           </div>
                         ) : (
@@ -335,14 +335,14 @@ export function SensitiveElements({
               {isGenerating ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  AI正在生成合规图片...
+                  AI is generating compliant image...
                 </>
               ) : (
                 <>
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
-                  一键生成合规图片 ({selectedElements.size} 项建议)
+                  Generate Compliant Image ({selectedElements.size} suggestions)
                 </>
               )}
             </Button>

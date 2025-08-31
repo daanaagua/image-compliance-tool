@@ -36,15 +36,15 @@ export default function Home() {
       });
       
       if (!response.ok) {
-        throw new Error('检测失败');
+        throw new Error('Detection failed');
       }
       
       const result = await response.json();
       setDetectionResult(result);
       setState('detection');
     } catch (error) {
-      console.error('检测错误:', error);
-      alert('检测失败，请重试');
+      console.error('Detection error:', error);
+      alert('Detection failed, please try again');
     } finally {
       setIsDetecting(false);
     }
@@ -66,15 +66,15 @@ export default function Home() {
       });
       
       if (!response.ok) {
-        throw new Error('生成失败');
+        throw new Error('Generation failed');
       }
       
       const result = await response.json();
       setGeneratedImage(result.image);
       setState('result');
     } catch (error) {
-      console.error('生成错误:', error);
-      alert('生成失败，请重试');
+      console.error('Generation error:', error);
+      alert('Generation failed, please try again');
       throw error; // 重新抛出错误以便进度条处理
     } finally {
       setIsGenerating(false);
@@ -119,10 +119,10 @@ export default function Home() {
             </svg>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            AI图片工具站
+            AI Image Compliance Tool
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
-            专业的AI驱动图片处理平台，提供合规检测、智能生成、格式转换等一站式服务
+            Detect Sensitive Elements & Generate Copyright-Safe Images with AI
           </p>
         </header>
 
@@ -131,27 +131,27 @@ export default function Home() {
           <div className="max-w-4xl mx-auto mb-12 space-y-8">
             <div className="grid md:grid-cols-2 gap-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold text-white mb-3">🛡️ 智能合规检测</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">🛡️ AI-Powered Detection</h3>
                 <p className="text-gray-200 leading-relaxed">
-                  采用先进的AI技术，自动识别图片中的敏感内容、版权侵权、不当元素等问题。支持多种图片格式，检测准确率高达95%以上，为您的内容安全保驾护航。
+                  Advanced AI technology automatically identifies sensitive content, copyrighted material, logos, and trademarks in your images. Supports multiple formats with 95%+ accuracy to keep your content compliant.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold text-white mb-3">🎨 一键智能修复</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">🎨 Smart Auto-Fix</h3>
                 <p className="text-gray-200 leading-relaxed">
-                  检测到问题后，AI会自动生成修复建议，并能一键生成符合规范的新图片。保持原图主要元素和构图，只修改问题部分，确保内容积极正面。
+                  Once issues are detected, AI generates intelligent suggestions and creates compliant versions instantly. Preserves original composition while fixing problematic elements for copyright-safe results.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold text-white mb-3">⚡ 快速高效处理</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">⚡ Lightning Fast</h3>
                 <p className="text-gray-200 leading-relaxed">
-                  平均检测时间仅需3-5秒，图片生成时间30秒内完成。支持批量处理，大幅提升工作效率，让内容审核变得简单快捷。
+                  Detection completes in 3-5 seconds, image generation in under 30 seconds. Streamline your workflow and avoid copyright risks with our efficient processing pipeline.
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <h3 className="text-xl font-semibold text-white mb-3">🔒 隐私安全保障</h3>
+                <h3 className="text-xl font-semibold text-white mb-3">🔒 Privacy Protected</h3>
                 <p className="text-gray-200 leading-relaxed">
-                  所有图片处理均在安全环境中进行，不会保存或泄露您的图片内容。采用端到端加密传输，确保数据安全和用户隐私。
+                  All image processing happens securely without storing your content. End-to-end encryption ensures your data remains private and protected throughout the entire process.
                 </p>
               </div>
             </div>
@@ -162,8 +162,8 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">开始使用图片合规检测</h3>
-              <p className="text-gray-300 mb-6">上传您的图片，让AI为您检测并修复合规问题</p>
+              <h3 className="text-2xl font-bold text-white mb-2">Start Image Compliance Detection</h3>
+              <p className="text-gray-300 mb-6">Upload your image and let AI detect and fix compliance issues</p>
             </div>
           </div>
         )}
@@ -196,10 +196,10 @@ export default function Home() {
                   {isDetecting ? (
                     <>
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      检测中...
+                      Detecting...
                     </>
                   ) : (
-                    '开始检测'
+                    'Start Detection'
                   )}
                 </Button>
                 <Button
@@ -208,7 +208,7 @@ export default function Home() {
                   size="lg"
                   className="px-6 sm:px-8 w-full sm:w-auto"
                 >
-                  返回主页
+                  Back to Home
                 </Button>
               </div>
             </div>

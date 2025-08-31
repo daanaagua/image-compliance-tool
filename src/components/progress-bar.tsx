@@ -98,10 +98,10 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
     <div className={`space-y-3 ${className}`}>
       <div className="flex items-center justify-between text-sm">
         <span className="text-gray-600 dark:text-gray-300">
-          {stage === 'slow' && '正在分析图片内容...'}
-          {stage === 'fast' && '检测敏感元素中...'}
-          {stage === 'waiting' && '生成合规图片中...'}
-          {stage === 'complete' && '处理完成！'}
+          {stage === 'slow' && 'Analyzing image content...'}
+      {stage === 'fast' && 'Detecting sensitive elements...'}
+      {stage === 'waiting' && 'Generating compliant image...'}
+      {stage === 'complete' && 'Processing complete!'}
         </span>
         <span className="font-medium text-blue-600 dark:text-blue-400">
           {Math.round(progress)}%
@@ -112,10 +112,10 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
         className="h-2 bg-gray-200 dark:bg-gray-700"
       />
       <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
-        {stage === 'slow' && '🔍 AI正在深度分析您的图片...'}
-        {stage === 'fast' && '⚡ 快速识别潜在风险元素...'}
-        {stage === 'waiting' && '🎨 精心制作合规替代方案...'}
-        {stage === 'complete' && '✅ 所有处理已完成！'}
+        {stage === 'slow' && '🔍 AI is deeply analyzing your image...'}
+      {stage === 'fast' && '⚡ Quickly identifying potential risk elements...'}
+      {stage === 'waiting' && '🎨 Carefully crafting compliant alternatives...'}
+      {stage === 'complete' && '✅ All processing completed!'}
       </div>
     </div>
   );

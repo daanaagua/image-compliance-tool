@@ -52,7 +52,7 @@ export function ImageUpload({
           <div className="relative">
             <Image
               src={uploadedImage}
-              alt="上传的图片"
+              alt="Uploaded image"
               width={600}
               height={400}
               className="w-full h-auto rounded-lg object-contain"
@@ -91,18 +91,18 @@ export function ImageUpload({
           <input {...getInputProps()} />
           <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
           <h3 className="text-lg font-semibold mb-2">
-            {isDragActive ? '释放文件以上传' : '上传图片'}
+            {isDragActive ? 'Drop files to upload' : 'Upload Image'}
           </h3>
           <p className="text-muted-foreground mb-4">
-            拖拽图片到此处，或点击选择文件
+            Drag and drop an image here, or click to select a file
           </p>
           <p className="text-sm text-muted-foreground">
-            支持 JPEG、PNG、GIF、WebP 格式
+            Supports JPEG, PNG, GIF, WebP formats
           </p>
           {isLoading && (
             <div className="mt-4">
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary mx-auto"></div>
-              <p className="text-sm text-muted-foreground mt-2">处理中...</p>
+              <p className="text-sm text-muted-foreground mt-2">Processing...</p>
             </div>
           )}
         </div>
