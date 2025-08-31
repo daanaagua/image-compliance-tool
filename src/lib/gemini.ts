@@ -1,13 +1,13 @@
 // OpenRouter API integration for Gemini model
 
-interface SensitiveElement {
+export interface SensitiveElement {
   type: string;
   description: string;
   severity: 'low' | 'medium' | 'high';
   suggestions: string[];
 }
 
-interface DetectionResult {
+export interface DetectionResult {
   hasSensitiveContent: boolean;
   elements: SensitiveElement[];
 }

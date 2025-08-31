@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Download, RotateCcw } from 'lucide-react';
-// import Image from 'next/image'; // 暂时不使用Next.js Image组件，因为它对SVG data URL支持有问题
+import Image from 'next/image';
 
 interface ResultDisplayProps {
   generatedImage: string;
@@ -33,14 +33,18 @@ export function ResultDisplay({
       <CardContent className="space-y-6">
         <div className="relative">
           {generatedImage ? (
-            <img
-              src={generatedImage}
-              alt="Generated compliant image"
-              className="w-full h-auto rounded-lg object-contain max-w-2xl mx-auto border"
-              style={{ maxHeight: '600px' }}
-              onLoad={() => console.log('Image loaded successfully')}
-              onError={(e) => console.error('Image load error:', e)}
-            />
+            <div className="relative w-full max-w-2xl mx-auto" style={{ maxHeight: '600px' }}>
+              <Image
+                src={generatedImage}
+                alt="Generated compliant image"
+                width={800}
+                height={600}
+                className="w-full h-auto rounded-lg object-contain border"
+                unoptimized
+                onLoad={() => console.log('Image loaded successfully')}
+                onError={(e) => console.error('Image load error:', e)}
+              />
+            </div>
           ) : (
             <div className="text-center p-8 text-muted-foreground">
               Image data is empty

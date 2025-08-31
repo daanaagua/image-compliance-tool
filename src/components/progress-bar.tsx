@@ -88,9 +88,9 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
   useEffect(() => {
     if (isActive && stage === 'waiting' && progress >= 90) {
       // 当到达90%时，等待外部调用完成
-      (window as any).completeProgress = completeProgress;
+      (window as Window & { completeProgress?: () => void }).completeProgress = completeProgress;
     }
-  }, [stage, progress, isActive]);
+  }, [stage, progress, isActive, completeProgress]);
 
   if (!isActive && progress === 0) return null;
 
@@ -123,7 +123,8 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
 
 // 导出完成进度条的方法
 export const completeProgressBar = () => {
-  if ((window as any).completeProgress) {
-    (window as any).completeProgress();
+  const windowWithProgress = window as Window & { completeProgress?: () => void };
+  if (windowWithProgress.completeProgress) {
+    windowWithProgress.completeProgress();
   }
 };
