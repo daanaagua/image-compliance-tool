@@ -256,11 +256,8 @@ ${selectedSuggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`).
 ${description.trim()}
 
 要求：
-1. 图片应该清晰、专业
-2. 色彩搭配和谐
-3. 构图合理美观
-4. 符合现代设计美学
-5. 确保内容积极正面，无任何敏感元素`;
+1. 保持原图的主要元素和构图，只修改描述中提到的部分
+2. 确保内容积极正面，无任何敏感元素`;
 
       const geminiResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',

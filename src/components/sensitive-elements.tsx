@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AlertTriangle, Edit2, Check } from 'lucide-react';
 import { DetectionResult } from '@/lib/gemini';
+import { ProgressBar, completeProgressBar } from '@/components/progress-bar';
 
 // 为了兼容API返回的数据结构，我们需要重新定义接口
 interface SensitiveElement {
@@ -20,7 +21,7 @@ interface SensitiveElement {
 
 interface SensitiveElementsProps {
   detectionResult: DetectionResult;
-  onGenerateCompliantImage: (selectedSuggestions: string[]) => void;
+  onGenerateCompliantImage: (selectedSuggestions: string[]) => Promise<void>;
   isGenerating?: boolean;
   onBackToHome?: () => void;
 }
@@ -35,6 +36,7 @@ export function SensitiveElements({
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
   const [editingSuggestion, setEditingSuggestion] = useState<string | null>(null);
   const [customSuggestions, setCustomSuggestions] = useState<Record<string, string>>({});
+  const [showProgress, setShowProgress] = useState(false);
 
   // 按类型分组敏感元素
   const groupedElements = detectionResult.elements.reduce((groups, element, index) => {
@@ -141,7 +143,7 @@ export function SensitiveElements({
     setSelectedElements(new Set());
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     const selectedSuggestions = detectionResult.elements
       .filter((_, index) => selectedElements.has(index.toString()))
       .flatMap((element, index) => {
@@ -149,7 +151,16 @@ export function SensitiveElements({
         return customSuggestion ? [customSuggestion] : element.suggestions;
       });
     
-    onGenerateCompliantImage(selectedSuggestions);
+    setShowProgress(true);
+    
+    try {
+      await onGenerateCompliantImage(selectedSuggestions);
+      // API返回后完成进度条
+      completeProgressBar();
+    } catch (error) {
+      setShowProgress(false);
+      throw error;
+    }
   };
 
   if (!detectionResult.hasSensitiveContent) {
@@ -308,19 +319,31 @@ export function SensitiveElements({
             );
           })}
           
-          <div className="pt-4 border-t">
+          <div className="pt-4 border-t space-y-4">
+            {showProgress && (
+              <ProgressBar 
+                isActive={isGenerating} 
+                onComplete={() => setShowProgress(false)}
+                className="mb-4"
+              />
+            )}
             <Button
               onClick={handleGenerate}
               disabled={selectedElements.size === 0 || isGenerating}
-              className="w-full"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {isGenerating ? (
                 <>
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  生成中...
+                  AI正在生成合规图片...
                 </>
               ) : (
-                `一键修改 (${selectedElements.size} 项建议)`
+                <>
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  一键生成合规图片 ({selectedElements.size} 项建议)
+                </>
               )}
             </Button>
           </div>
