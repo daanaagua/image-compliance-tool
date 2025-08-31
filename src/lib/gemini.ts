@@ -23,14 +23,7 @@ function getApiKey(): string {
   return apiKey;
 }
 
-function getOpenAIApiKey(): string {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    console.log('OPENAI_API_KEY not configured, will use SVG fallback');
-    return '';
-  }
-  return apiKey;
-}
+
 
 function convertImageToBase64DataUrl(imageData: string): string {
   // If it's already a data URL, return as is
@@ -156,7 +149,7 @@ ${selectedSuggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`).
 2. 移除或替换所有敏感内容
 3. 确保内容积极正面
 4. 描述要详细具体，便于图片生成
-5. 使用英文描述，适合DALL-E等图片生成模型
+5. 使用英文描述，适合图片生成模型
 
 请直接返回英文图片描述，不需要其他格式。`;
 
@@ -205,50 +198,7 @@ ${selectedSuggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`).
 
     console.log('生成的图片描述:', description);
     
-    // Try to generate image using available APIs
-    // First try OpenAI DALL-E if API key is available
-    const openaiApiKey = getOpenAIApiKey();
-    if (openaiApiKey && openaiApiKey !== 'your-openai-api-key-here') {
-      try {
-        console.log('🎨 尝试使用 OpenAI DALL-E 生成图片...');
-        const dalleResponse = await fetch('https://api.openai.com/v1/images/generations', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openaiApiKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            model: 'dall-e-3',
-            prompt: description.trim(),
-            n: 1,
-            size: '1024x1024',
-            quality: 'standard',
-            response_format: 'url'
-          })
-        });
-
-      if (dalleResponse.ok) {
-        const dalleData = await dalleResponse.json();
-        const imageUrl = dalleData.data?.[0]?.url;
-        
-        if (imageUrl) {
-          console.log('✅ DALL-E 成功生成图片 URL:', imageUrl);
-          return imageUrl;
-        } else {
-          console.log('❌ DALL-E 响应中没有找到图片 URL:', dalleData);
-        }
-        } else {
-          const errorText = await dalleResponse.text();
-          console.log('❌ OpenAI DALL-E API 调用失败. 状态码:', dalleResponse.status, '错误:', errorText);
-        }
-      } catch (dalleError) {
-        console.log('❌ OpenAI DALL-E 生成失败:', dalleError);
-      }
-    } else {
-      console.log('💡 未配置有效的 OPENAI_API_KEY，尝试使用 OpenRouter Gemini 生成图片');
-    }
-    
-    // Try OpenRouter Gemini image generation
+    // Generate image using OpenRouter Gemini
     try {
       console.log('🎨 尝试使用 OpenRouter Gemini 生成图片...');
       const geminiImagePrompt = `请基于以下描述生成一张高质量的图片：

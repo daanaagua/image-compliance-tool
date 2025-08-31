@@ -103,7 +103,7 @@ src/
 
 1. **获取API密钥**: 访问 [OpenRouter](https://openrouter.ai/) 获取API密钥
 2. **配置环境变量**: 在 `.env.local` 文件中设置 `OPENROUTER_API_KEY`
-3. **模型**: 使用 `google/gemini-2.5-flash-lite-preview-06-17`
+3. **模型**: 使用 `google/gemini-2.5-flash-image-preview:free`
 
 ### 测试API连接
 
