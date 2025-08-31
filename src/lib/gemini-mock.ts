@@ -1,12 +1,13 @@
-import { GoogleGenAI } from '@google/genai';
+// Mock implementation - Google GenAI import commented out to avoid unused variable warning
+// import { GoogleGenAI } from '@google/genai';
 
-if (!process.env.GOOGLE_GEMINI_API_KEY) {
-  throw new Error('GOOGLE_GEMINI_API_KEY is not set');
-}
+// if (!process.env.GOOGLE_GEMINI_API_KEY) {
+//   throw new Error('GOOGLE_GEMINI_API_KEY is not set');
+// }
 
-const ai = new GoogleGenAI({
-  apiKey: process.env.GOOGLE_GEMINI_API_KEY
-});
+// const ai = new GoogleGenAI({
+//   apiKey: process.env.GOOGLE_GEMINI_API_KEY
+// });
 
 export interface SensitiveElement {
   id: string;
@@ -23,7 +24,10 @@ export interface DetectionResult {
   overallRisk: 'high' | 'medium' | 'low';
 }
 
-export async function detectSensitiveElements(imageBase64: string): Promise<DetectionResult> {
+export async function detectSensitiveElements(
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _imageBase64: string
+): Promise<DetectionResult> {
   // 临时返回模拟数据，避免API调用问题
   console.log('使用模拟数据进行检测...');
   
@@ -59,7 +63,8 @@ export async function detectSensitiveElements(imageBase64: string): Promise<Dete
 
 export async function generateCompliantImage(
   originalImageBase64: string,
-  selectedSuggestions: string[]
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _selectedSuggestions: string[]
 ): Promise<string> {
   console.log('使用模拟数据生成合规图片...');
   

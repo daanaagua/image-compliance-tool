@@ -33,7 +33,6 @@ export function SensitiveElements({
   onBackToHome
 }: SensitiveElementsProps) {
   const [selectedElements, setSelectedElements] = useState<Set<string>>(new Set());
-  const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set());
   const [editingSuggestion, setEditingSuggestion] = useState<string | null>(null);
   const [customSuggestions, setCustomSuggestions] = useState<Record<string, string>>({});
   const [showProgress, setShowProgress] = useState(false);
@@ -112,8 +111,6 @@ export function SensitiveElements({
         newSelectedTypes.add(type);
       }
     });
-    
-    setSelectedTypes(newSelectedTypes);
   };
 
   const getTypeSelectionState = (type: string) => {
@@ -230,7 +227,10 @@ export function SensitiveElements({
                     checked={selectionState === 'all'}
                     ref={(el) => {
                       if (el) {
-                        el.indeterminate = selectionState === 'partial';
+                        const checkbox = el.querySelector('input[type="checkbox"]') as HTMLInputElement;
+                        if (checkbox) {
+                          checkbox.indeterminate = selectionState === 'partial';
+                        }
                       }
                     }}
                     onCheckedChange={() => handleTypeToggle(type)}

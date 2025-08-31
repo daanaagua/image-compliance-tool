@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Progress } from '@/components/ui/progress';
 
 interface ProgressBarProps {
@@ -20,8 +20,7 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
       return;
     }
 
-    let interval: NodeJS.Timeout;
-    let timeout: NodeJS.Timeout;
+    let interval: NodeJS.Timeout | null = null;
 
     // 第一阶段：慢速进度 (0% -> 15%)
     if (stage === 'slow' && progress < 15) {
@@ -64,12 +63,11 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
 
     return () => {
       if (interval) clearInterval(interval);
-      if (timeout) clearTimeout(timeout);
     };
   }, [isActive, stage, progress]);
 
   // 外部调用完成进度条
-  const completeProgress = () => {
+  const completeProgress = useCallback(() => {
     setStage('complete');
     const interval = setInterval(() => {
       setProgress(prev => {
@@ -82,7 +80,7 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
         return newProgress;
       });
     }, 50); // 快速完成最后10%
-  };
+  }, [onComplete]);
 
   // 暴露完成方法给父组件
   useEffect(() => {
