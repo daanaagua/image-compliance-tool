@@ -15,10 +15,10 @@ export async function POST(request: NextRequest) {
     // 移除data:image/jpeg;base64,前缀
     const base64Data = image.replace(/^data:image\/[a-z]+;base64,/, '');
     
-    const resultImageBase64 = await generateCompliantImage(base64Data, suggestions);
+    const resultImageDataUrl = await generateCompliantImage(base64Data, suggestions);
     
     return NextResponse.json({ 
-      image: `data:image/png;base64,${resultImageBase64}` 
+      image: resultImageDataUrl 
     });
   } catch (error) {
     console.error('生成API错误:', error);

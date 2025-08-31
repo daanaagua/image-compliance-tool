@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { ImageUpload } from '@/components/image-upload';
 import { SensitiveElements } from '@/components/sensitive-elements';
 import { ResultDisplay } from '@/components/result-display';
+import { Button } from '@/components/ui/button';
 import { DetectionResult } from '@/lib/gemini';
 
-type AppState = 'upload' | 'detection' | 'result';
+type AppState = 'upload' | 'ready' | 'detection' | 'result';
 
 export default function Home() {
   const [state, setState] = useState<AppState>('upload');
@@ -16,8 +17,12 @@ export default function Home() {
   const [isDetecting, setIsDetecting] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const handleImageUpload = async (file: File, dataUrl: string) => {
+  const handleImageUpload = (file: File, dataUrl: string) => {
     setUploadedImage(dataUrl);
+    setState('ready');
+  };
+
+  const handleStartDetection = async () => {
     setIsDetecting(true);
     
     try {
@@ -26,7 +31,7 @@ export default function Home() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ image: dataUrl }),
+        body: JSON.stringify({ image: uploadedImage }),
       });
       
       if (!response.ok) {
@@ -90,6 +95,13 @@ export default function Home() {
     setGeneratedImage('');
   };
 
+  const handleBackToHome = () => {
+    setState('upload');
+    setUploadedImage('');
+    setDetectionResult(null);
+    setGeneratedImage('');
+  };
+
   const handleRemoveImage = () => {
     setUploadedImage('');
     setState('upload');
@@ -117,11 +129,48 @@ export default function Home() {
             />
           )}
 
+          {state === 'ready' && uploadedImage && (
+            <div className="space-y-6">
+              <ImageUpload
+                onImageUpload={handleImageUpload}
+                uploadedImage={uploadedImage}
+                onRemoveImage={handleRemoveImage}
+                isLoading={isDetecting}
+              />
+              <div className="flex justify-center gap-4">
+                <Button
+                  onClick={handleStartDetection}
+                  disabled={isDetecting}
+                  size="lg"
+                  className="px-8"
+                >
+                  {isDetecting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      检测中...
+                    </>
+                  ) : (
+                    '开始检测'
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleBackToHome}
+                  size="lg"
+                  className="px-8"
+                >
+                  返回主页
+                </Button>
+              </div>
+            </div>
+          )}
+
           {state === 'detection' && detectionResult && (
             <SensitiveElements
               detectionResult={detectionResult}
               onGenerateCompliantImage={handleGenerateCompliantImage}
               isGenerating={isGenerating}
+              onBackToHome={handleBackToHome}
             />
           )}
 
@@ -130,6 +179,7 @@ export default function Home() {
               generatedImage={generatedImage}
               onDownload={handleDownload}
               onStartOver={handleStartOver}
+              onBackToHome={handleBackToHome}
             />
           )}
         </main>

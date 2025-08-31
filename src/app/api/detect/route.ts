@@ -15,7 +15,11 @@ export async function POST(request: NextRequest) {
     // 移除data:image/jpeg;base64,前缀
     const base64Data = image.replace(/^data:image\/[a-z]+;base64,/, '');
     
+    console.log('开始检测图片，图片数据长度:', base64Data.length);
+    
     const result = await detectSensitiveElements(base64Data);
+    
+    console.log('检测结果:', JSON.stringify(result, null, 2));
     
     return NextResponse.json(result);
   } catch (error) {
