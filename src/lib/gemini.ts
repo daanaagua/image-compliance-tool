@@ -36,39 +36,39 @@ function convertImageToBase64DataUrl(imageData: string): string {
 
 export async function detectSensitiveElements(imageData: string): Promise<DetectionResult> {
   try {
-    const prompt = `请仔细分析这张图片中是否包含敏感内容，包括但不限于：
+    const prompt = `Please carefully analyze this image for sensitive content, including but not limited to:
 
-1. **暴力内容**：武器、血腥场面、暴力行为等
-2. **成人内容**：裸体、性暗示、色情内容等
-3. **仇恨言论**：歧视性内容、种族主义、仇恨符号等
-4. **危险活动**：吸毒、自残、危险行为等
-5. **政治敏感**：政治人物、敏感政治内容等
-6. **版权侵权内容**：
-   - 知名品牌商标（如Nike、Adidas、Apple、McDonald's等）
-   - 品牌标识、Logo
-   - 受版权保护的卡通人物、影视角色
-   - 明星肖像、艺术作品
-7. **个人隐私**：身份证、电话号码、地址等个人信息
-8. **其他不当内容**：虚假信息、欺诈内容等
+1. **Violent Content**: Weapons, bloody scenes, violent behavior, etc.
+2. **Adult Content**: Nudity, sexual suggestions, pornographic content, etc.
+3. **Hate Speech**: Discriminatory content, racism, hate symbols, etc.
+4. **Dangerous Activities**: Drug use, self-harm, dangerous behaviors, etc.
+5. **Political Sensitivity**: Political figures, sensitive political content, etc.
+6. **Copyright Infringement Content**:
+   - Famous brand trademarks (such as Nike, Adidas, Apple, McDonald's, etc.)
+   - Brand logos and identifiers
+   - Copyrighted cartoon characters, movie/TV characters
+   - Celebrity portraits, artwork
+7. **Personal Privacy**: ID cards, phone numbers, addresses, and other personal information
+8. **Other Inappropriate Content**: False information, fraudulent content, etc.
 
-**重要提醒**：请特别注意检测图片中的商标、品牌标识和Logo，即使它们看起来很小或不明显。任何可识别的品牌元素都应该被标记为版权侵权内容。
+**Important Note**: Please pay special attention to detecting trademarks, brand logos, and brand identifiers in the image, even if they appear small or inconspicuous. Any recognizable brand elements should be marked as copyright infringement content.
 
-请以JSON格式返回检测结果，格式如下：
+Please return the detection results in JSON format as follows:
 {
   "hasSensitiveContent": boolean,
   "elements": [
     {
-      "type": "敏感内容类型",
-      "description": "具体描述发现的内容",
+      "type": "Sensitive content type",
+      "description": "Specific description of the content found",
       "severity": "low|medium|high",
-      "suggestions": ["完整的修改建议，不要使用分号分割"]
+      "suggestions": ["Complete modification suggestion, do not split with semicolons"]
     }
   ]
 }
 
-**重要**：每个suggestions数组中只包含一个完整的建议字符串，不要将一个建议分割成多个字符串。如果有多个不同的建议，请作为不同的element返回。
+**Important**: Each suggestions array should contain only one complete suggestion string. Do not split a suggestion into multiple strings. If there are multiple different suggestions, return them as different elements.
 
-如果没有发现任何敏感内容，请返回：{"hasSensitiveContent": false, "elements": []}`;
+If no sensitive content is found, please return: {"hasSensitiveContent": false, "elements": []}`;
 
     const response = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
@@ -107,10 +107,10 @@ export async function detectSensitiveElements(imageData: string): Promise<Detect
     }
 
     const data = await response.json();
-    console.log('OpenRouter API 原始响应:', JSON.stringify(data, null, 2));
+    console.log('OpenRouter API raw response:', JSON.stringify(data, null, 2));
     
     const content = data.choices?.[0]?.message?.content;
-    console.log('AI 返回的内容:', content);
+    console.log('AI returned content:', content);
     
     if (!content) {
       throw new Error('No content received from OpenRouter API');
@@ -119,17 +119,17 @@ export async function detectSensitiveElements(imageData: string): Promise<Detect
     // Extract JSON from the response
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
-      console.error('无法从响应中提取JSON:', content);
+      console.error('Unable to extract JSON from response:', content);
       throw new Error('No valid JSON found in response');
     }
 
-    console.log('提取的JSON字符串:', jsonMatch[0]);
+    console.log('Extracted JSON string:', jsonMatch[0]);
     const result = JSON.parse(jsonMatch[0]);
-    console.log('解析后的结果:', result);
+    console.log('Parsed result:', result);
     return result as DetectionResult;
   } catch (error) {
     console.error('Detection error:', error);
-    throw new Error('检测失败，请重试');
+    throw new Error('Detection failed, please try again');
   }
 }
 
@@ -139,19 +139,19 @@ export async function generateCompliantImage(
 ): Promise<string> {
   try {
     // First, generate a detailed description for the compliant image
-    const descriptionPrompt = `请根据以下修改建议，生成一个合规的图片描述：
+    const descriptionPrompt = `Please generate a compliant image description based on the following modification suggestions:
 
-修改建议：
+Modification suggestions:
 ${selectedSuggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`).join('\n')}
 
-请基于原图内容和这些建议，生成一个详细的、合规的图片描述，用于图片生成。描述应该：
-1. 保持原图的主要元素和构图
-2. 移除或替换所有敏感内容
-3. 确保内容积极正面
-4. 描述要详细具体，便于图片生成
-5. 使用英文描述，适合图片生成模型
+Based on the original image content and these suggestions, please generate a detailed, compliant image description for image generation. The description should:
+1. Maintain the main elements and composition of the original image
+2. Remove or replace all sensitive content
+3. Ensure the content is positive and appropriate
+4. Be detailed and specific for image generation
+5. Use English description, suitable for image generation models
 
-请直接返回英文图片描述，不需要其他格式。`;
+Please return the English image description directly, without any other formatting.`;
 
     const descriptionResponse = await fetch(OPENROUTER_API_URL, {
       method: 'POST',
@@ -196,18 +196,18 @@ ${selectedSuggestions.map((suggestion, index) => `${index + 1}. ${suggestion}`).
       throw new Error('No description received from OpenRouter API');
     }
 
-    console.log('生成的图片描述:', description);
+    console.log('Generated image description:', description);
     
     // Generate image using OpenRouter Gemini
     try {
-      console.log('🎨 尝试使用 OpenRouter Gemini 生成图片...');
-      const geminiImagePrompt = `请基于以下描述生成一张高质量的图片：
+      console.log('🎨 Attempting to generate image using OpenRouter Gemini...');
+      const geminiImagePrompt = `Please generate a high-quality image based on the following description:
 
 ${description.trim()}
 
-要求：
-1. 保持原图的主要元素和构图，只修改描述中提到的部分
-2. 确保内容积极正面，无任何敏感元素`;
+Requirements:
+1. Maintain the main elements and composition of the original image, only modify the parts mentioned in the description
+2. Ensure the content is positive and contains no sensitive elements`;
 
       const geminiResponse = await fetch(OPENROUTER_API_URL, {
         method: 'POST',
@@ -232,7 +232,7 @@ ${description.trim()}
 
       if (geminiResponse.ok) {
         const geminiData = await geminiResponse.json();
-        console.log('OpenRouter Gemini 原始响应:', JSON.stringify(geminiData, null, 2));
+        console.log('OpenRouter Gemini raw response:', JSON.stringify(geminiData, null, 2));
         
         // Extract image data from response
         const message = geminiData.choices?.[0]?.message;
@@ -264,22 +264,22 @@ ${description.trim()}
           }
           
           if (imageData) {
-            console.log('✅ OpenRouter Gemini 成功生成图片');
+            console.log('✅ OpenRouter Gemini successfully generated image');
             return imageData;
           } else {
-            console.log('❌ OpenRouter Gemini 响应中未找到图片数据');
+            console.log('❌ No image data found in OpenRouter Gemini response');
           }
         }
       } else {
         const errorText = await geminiResponse.text();
-        console.log('❌ OpenRouter Gemini API 调用失败. 状态码:', geminiResponse.status, '错误:', errorText);
+        console.log('❌ OpenRouter Gemini API call failed. Status code:', geminiResponse.status, 'Error:', errorText);
       }
     } catch (geminiError) {
-      console.log('❌ OpenRouter Gemini 生成失败:', geminiError);
+      console.log('❌ OpenRouter Gemini generation failed:', geminiError);
     }
     
     // Final fallback: Create a realistic-looking SVG image based on the description
-    console.log('💡 使用 SVG 备用方案生成图片');
+    console.log('💡 Using SVG fallback to generate image');
     const svgContent = `
       <svg width="1024" height="1024" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -365,10 +365,10 @@ ${description.trim()}
         <path d="M540 350 l7 7 l14 -14" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" />
         
         <!-- Success text -->
-        <text x="550" y="390" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937" text-anchor="middle">合规图片已生成</text>
+        <text x="550" y="390" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937" text-anchor="middle">Compliant Image Generated</text>
         
         <!-- Subtitle -->
-        <text x="550" y="415" font-family="Arial, sans-serif" font-size="14" fill="#6b7280" text-anchor="middle">基于AI智能优化</text>
+        <text x="550" y="415" font-family="Arial, sans-serif" font-size="14" fill="#6b7280" text-anchor="middle">AI-Optimized Content</text>
         
         <!-- Description in display area -->
         <foreignObject x="470" y="230" width="410" height="60">
@@ -384,6 +384,6 @@ ${description.trim()}
     return `data:image/svg+xml;base64,${base64Svg}`;
   } catch (error) {
     console.error('Image generation error:', error);
-    throw new Error('图片生成失败，请重试');
+    throw new Error('Image generation failed, please try again');
   }
 }

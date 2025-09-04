@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     
     if (!image || !suggestions || !Array.isArray(suggestions)) {
       return NextResponse.json(
-        { error: '请提供图片数据和修改建议' },
+        { error: 'Please provide image data and modification suggestions' },
         { status: 400 }
       );
     }
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('生成API错误:', error);
     return NextResponse.json(
-      { error: '生成失败，请重试' },
+      { error: 'Generation failed, please try again' },
       { status: 500 }
     );
   }

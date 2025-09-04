@@ -22,43 +22,43 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
 
     let interval: NodeJS.Timeout | null = null;
 
-    // 第一阶段：慢速进度 (0% -> 15%)
+    // Stage 1: Slow progress (0% -> 15%)
     if (stage === 'slow' && progress < 15) {
       interval = setInterval(() => {
         setProgress(prev => {
-          const newProgress = prev + Math.random() * 2 + 0.5; // 0.5-2.5% 每次
+          const newProgress = prev + Math.random() * 2 + 0.5; // 0.5-2.5% each time
           if (newProgress >= 15) {
             setStage('fast');
             return 15;
           }
           return newProgress;
         });
-      }, 200); // 每200ms更新一次
+      }, 200); // Update every 200ms
     }
-    // 第二阶段：快速进度 (15% -> 75%)
+    // Stage 2: Fast progress (15% -> 75%)
     else if (stage === 'fast' && progress < 75) {
       interval = setInterval(() => {
         setProgress(prev => {
-          const newProgress = prev + Math.random() * 8 + 5; // 5-13% 每次
+          const newProgress = prev + Math.random() * 8 + 5; // 5-13% each time
           if (newProgress >= 75) {
             setStage('waiting');
             return 75;
           }
           return newProgress;
         });
-      }, 100); // 每100ms更新一次，更快
+      }, 100); // Update every 100ms, faster
     }
-    // 第三阶段：慢速到90% (75% -> 90%)
+    // Stage 3: Slow to 90% (75% -> 90%)
     else if (stage === 'waiting' && progress < 90) {
       interval = setInterval(() => {
         setProgress(prev => {
-          const newProgress = prev + Math.random() * 1 + 0.2; // 0.2-1.2% 每次
+          const newProgress = prev + Math.random() * 1 + 0.2; // 0.2-1.2% each time
           if (newProgress >= 90) {
             return 90;
           }
           return newProgress;
         });
-      }, 300); // 每300ms更新一次，很慢
+      }, 300); // Update every 300ms, very slow
     }
 
     return () => {
@@ -66,7 +66,7 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
     };
   }, [isActive, stage, progress]);
 
-  // 外部调用完成进度条
+  // External call to complete progress bar
   const completeProgress = useCallback(() => {
     setStage('complete');
     const interval = setInterval(() => {
@@ -79,13 +79,13 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
         }
         return newProgress;
       });
-    }, 50); // 快速完成最后10%
+    }, 50); // Quickly complete the last 10%
   }, [onComplete]);
 
-  // 暴露完成方法给父组件
+  // Expose completion method to parent component
   useEffect(() => {
     if (isActive && stage === 'waiting' && progress >= 90) {
-      // 当到达90%时，等待外部调用完成
+      // When reaching 90%, wait for external call to complete
       (window as Window & { completeProgress?: () => void }).completeProgress = completeProgress;
     }
   }, [stage, progress, isActive, completeProgress]);
@@ -119,7 +119,7 @@ export function ProgressBar({ isActive, onComplete, className }: ProgressBarProp
   );
 }
 
-// 导出完成进度条的方法
+// Export method to complete progress bar
 export const completeProgressBar = () => {
   const windowWithProgress = window as Window & { completeProgress?: () => void };
   if (windowWithProgress.completeProgress) {

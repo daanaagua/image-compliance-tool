@@ -18,7 +18,7 @@ export function ResultDisplay({
   onStartOver,
   onBackToHome
 }: ResultDisplayProps) {
-  // 添加调试信息
+  // Add debug information
   console.log('ResultDisplay - generatedImage:', generatedImage?.substring(0, 100) + '...');
   console.log('ResultDisplay - image type:', generatedImage?.split(',')[0]);
   

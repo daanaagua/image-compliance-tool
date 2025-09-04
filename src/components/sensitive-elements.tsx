@@ -11,7 +11,7 @@ import { AlertTriangle, Edit2, Check } from 'lucide-react';
 import { DetectionResult } from '@/lib/gemini';
 import { ProgressBar, completeProgressBar } from '@/components/progress-bar';
 
-// 为了兼容API返回的数据结构，我们需要重新定义接口
+// Redefine interfaces to be compatible with API response data structure
 interface SensitiveElement {
   type: string;
   description: string;
@@ -37,7 +37,7 @@ export function SensitiveElements({
   const [customSuggestions, setCustomSuggestions] = useState<Record<string, string>>({});
   const [showProgress, setShowProgress] = useState(false);
 
-  // 按类型分组敏感元素
+  // Group sensitive elements by type
   const groupedElements = detectionResult.elements.reduce((groups, element, index) => {
     const type = element.type;
     if (!groups[type]) {
@@ -76,7 +76,7 @@ export function SensitiveElements({
     }
     setSelectedElements(newSelected);
     
-    // 更新类型选择状态
+    // Update type selection status
     updateTypeSelection();
   };
 
@@ -85,14 +85,14 @@ export function SensitiveElements({
     const typeElementIds = typeElements.map(el => el.index.toString());
     const newSelected = new Set(selectedElements);
     
-    // 检查是否所有该类型的元素都已选中
+    // Check if all elements of this type are selected
     const allSelected = typeElementIds.every(id => selectedElements.has(id));
     
     if (allSelected) {
-      // 取消选择所有该类型的元素
+      // Deselect all elements of this type
       typeElementIds.forEach(id => newSelected.delete(id));
     } else {
-      // 选择所有该类型的元素
+      // Select all elements of this type
       typeElementIds.forEach(id => newSelected.add(id));
     }
     
@@ -152,7 +152,7 @@ export function SensitiveElements({
     
     try {
       await onGenerateCompliantImage(selectedSuggestions);
-      // API返回后完成进度条
+      // Complete progress bar after API response
       completeProgressBar();
     } catch (error) {
       setShowProgress(false);
@@ -220,7 +220,7 @@ export function SensitiveElements({
             const selectionState = getTypeSelectionState(type);
             return (
               <div key={type} className="border rounded-lg p-4 space-y-4">
-                {/* 类型标题和选择框 */}
+                {/* Type title and checkbox */}
                 <div className="flex items-center space-x-3 pb-2 border-b">
                   <Checkbox
                     id={`type-${type}`}
@@ -246,7 +246,7 @@ export function SensitiveElements({
                   </div>
                 </div>
                 
-                {/* 该类型下的具体元素 */}
+                {/* Specific elements under this type */}
                 <div className="space-y-3 ml-6">
                   {elements.map((element) => (
                     <div key={element.index} className="border rounded-lg p-3 space-y-3">

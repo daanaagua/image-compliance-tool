@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
     
     if (!image) {
       return NextResponse.json(
-        { error: '请提供图片数据' },
+        { error: 'Please provide image data' },
         { status: 400 }
       );
     }
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('检测API错误:', error);
     return NextResponse.json(
-      { error: '检测失败，请重试' },
+      { error: 'Detection failed, please try again' },
       { status: 500 }
     );
   }

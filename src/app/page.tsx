@@ -75,7 +75,7 @@ export default function Home() {
     } catch (error) {
       console.error('Generation error:', error);
       alert('Generation failed, please try again');
-      throw error; // 重新抛出错误以便进度条处理
+      throw error; // Re-throw error for progress bar handling
     } finally {
       setIsGenerating(false);
     }
@@ -126,7 +126,7 @@ export default function Home() {
           </p>
         </header>
 
-        {/* SEO功能介绍 */}
+        {/* SEO Feature Introduction */}
         {state === 'upload' && (
           <div className="max-w-4xl mx-auto mb-12 space-y-8">
             <div className="grid md:grid-cols-2 gap-8">

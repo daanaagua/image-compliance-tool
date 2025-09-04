@@ -28,34 +28,34 @@ export async function detectSensitiveElements(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _imageBase64: string
 ): Promise<DetectionResult> {
-  // 临时返回模拟数据，避免API调用问题
-  console.log('使用模拟数据进行检测...');
+  // Temporarily return mock data to avoid API call issues
+  console.log('🔍 Using mock data for detection...');
   
-  // 模拟检测结果
+  // Mock detection results
   const mockResult: DetectionResult = {
     hasSensitiveContent: true,
     elements: [
       {
         id: 'mock-1',
         type: 'trademark',
-        content: '检测到可能的商标标识',
-        location: '图片中央区域',
+        content: 'Detected possible trademark elements',
+        location: 'Central area of image',
         riskLevel: 'medium',
-        suggestion: '建议模糊处理或替换为通用图标'
+        suggestion: 'Recommend blurring or replacing with generic icons'
       },
       {
         id: 'mock-2',
         type: 'product',
-        content: '检测到知名产品',
-        location: '图片左上角',
+        content: 'Detected well-known product',
+        location: 'Upper left corner of image',
         riskLevel: 'high',
-        suggestion: '建议完全移除或替换为类似的通用产品'
+        suggestion: 'Recommend complete removal or replacement with similar generic product'
       }
     ],
     overallRisk: 'high'
   };
   
-  // 添加延迟模拟API调用
+  // Add delay to simulate API call
   await new Promise(resolve => setTimeout(resolve, 1000));
   
   return mockResult;
@@ -66,11 +66,11 @@ export async function generateCompliantImage(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _selectedSuggestions: string[]
 ): Promise<string> {
-  console.log('使用模拟数据生成合规图片...');
+  console.log('🎨 Using mock data to generate compliant image...');
   
-  // 模拟图片生成延迟
+  // Simulate image generation delay
   await new Promise(resolve => setTimeout(resolve, 2000));
   
-  // 返回原图片（实际应用中这里会返回修改后的图片）
+  // Return original image (in actual application, this would return the modified image)
   return originalImageBase64;
 }
